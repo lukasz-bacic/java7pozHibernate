@@ -38,13 +38,13 @@ public class App {
         System.out.println("suma: " + sum);
 
 
-        Optional<Product> product1 = ProductRepository.findProduct(10L);
+        Optional<Product> product1 = ProductRepository.findProduct(9L);
         if (product1.isPresent()) {
             Product product10 = product1.get();
-            product10.setName("Jogurt");
+            product10.setName("Kefir");
             product10.setPrice(Price.builder()
-                    .priceNet(new BigDecimal("2"))
-                    .priceGross(new BigDecimal("2.5"))
+                    .priceNet(new BigDecimal("3"))
+                    .priceGross(new BigDecimal("3.5"))
                     .priceSymbol("PLN").build());
             ProductRepository.saveOrUpdateProduct(product10);
 
@@ -69,6 +69,13 @@ public class App {
 
 
             OrderRepository.saveOrder(kowalskiOrder);
+
+            OrderRepository.findAll().forEach(o -> o.getOrderDetailSet()
+                    .forEach(od -> System.out.println(od.getProduct().getName())));
+
+            OrderRepository.findAllWithProductName("KEFI").forEach(o -> o.getOrderDetailSet()
+                    .forEach(od -> System.out.println("zamowienia  z kefirem "+ od.getProduct().getName())));
+
 
         }
 

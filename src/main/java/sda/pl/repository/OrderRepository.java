@@ -1,8 +1,12 @@
 package sda.pl.repository;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import sda.pl.HibernateUtil;
 import sda.pl.domain.Order;
+
+import java.util.Collections;
+import java.util.List;
 
 public class OrderRepository {
 
@@ -20,7 +24,44 @@ public class OrderRepository {
                 session.close();
             }
         }
-
-
     }
+
+    public static List<Order> findAll(){
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            String hql = "SELECT o FROM Order o JOIN FETCH o.orderDetailSet ";
+            Query query = session.createQuery(hql);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }finally {
+            if(session != null && session.isOpen()){
+                session.close();
+            }
+        }
+    }
+
+    public static List<Order> findAllWithProductName(String productName){
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            String hql = "SELECT o FROM Order o JOIN FETCH o.orderDetailSet od WHERE UPPER(od.product.name) like :productName ";
+            Query query = session.createQuery(hql);
+            query.setParameter("productName", "%"+productName.toUpperCase()+"%");
+            return query.getResultList();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }finally {
+            if(session != null && session.isOpen()){
+                session.close();
+            }
+        }
+    }
+
+
 }
