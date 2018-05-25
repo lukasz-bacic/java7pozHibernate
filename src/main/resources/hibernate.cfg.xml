@@ -14,5 +14,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
 
         <mapping class="sda.pl.Product" />
+        <mapping class="sda.pl.domain.Order" />
+        <mapping class="sda.pl.domain.OrderDetail" />
     </session-factory>
 </hibernate-configuration>
