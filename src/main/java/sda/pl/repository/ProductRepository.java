@@ -5,6 +5,8 @@ import org.hibernate.query.Query;
 import sda.pl.HibernateUtil;
 import sda.pl.Product;
 
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +69,29 @@ public class ProductRepository {
                 session.close();
             }
         }
+    }
 
 
+    public static List<Product> findAllWithPriceNetLessThan(BigDecimal price){
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            String hql = "SELECT p FROM Product p WHERE p.price.priceNet < :price " +
+                    "ORDER BY p.price.priceNet DESC";
+            Query query = session.createQuery(hql);
+            query.setParameter("price", price);
+            query.setMaxResults(100);
+            List resultList = query.getResultList();
+            return resultList;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        } finally {
+            if(session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        
     }
 }

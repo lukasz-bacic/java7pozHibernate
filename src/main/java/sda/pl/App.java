@@ -14,8 +14,8 @@ public class App {
                 .name("Maslo")
                 .color(Color.WHITE)
                 .price(Price.builder().
-                        priceGross(new BigDecimal("7.50"))
-                        .priceNet(new BigDecimal("5.25"))
+                        priceGross(new BigDecimal("6.50"))
+                        .priceNet(new BigDecimal("4.25"))
                         .priceSymbol("PLN").build()).build();
 
         ProductRepository.saveProduct(maslo);
@@ -26,7 +26,8 @@ public class App {
 
         ProductRepository.findAll().forEach(p -> System.out.println(p.getId() +" "+p.getName()));
 
-
+        ProductRepository.findAllWithPriceNetLessThan(new BigDecimal("5")).
+                forEach(p -> System.out.println("cena mniejsza niz 5"+p.getName()));
 
 
 
