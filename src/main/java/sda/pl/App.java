@@ -1,9 +1,13 @@
 package sda.pl;
 
 import org.hibernate.Session;
+import sda.pl.domain.Order;
+import sda.pl.domain.OrderDetail;
+import sda.pl.repository.OrderRepository;
 import sda.pl.repository.ProductRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class App {
@@ -42,8 +46,30 @@ public class App {
                     .priceNet(new BigDecimal("2"))
                     .priceGross(new BigDecimal("2.5"))
                     .priceSymbol("PLN").build());
-
             ProductRepository.saveOrUpdateProduct(product10);
+
+
+            Order kowalskiOrder = Order.builder()
+                    .date(LocalDateTime.now())
+                    .email("kowalski@gmail.com")
+                    .RODO(true)
+                    .cityName("Poznan")
+                    .totalPrice(new Price())
+                    .build();
+
+            OrderDetail detail1 = OrderDetail.builder()
+                    .amount(5L)
+                    .product(product10)
+                    .price(product10.getPrice()).build();
+
+            kowalskiOrder.addOrderDetail(detail1);
+            kowalskiOrder.calculateTotalPrice();
+
+
+
+
+            OrderRepository.saveOrder(kowalskiOrder);
+
         }
 
 
