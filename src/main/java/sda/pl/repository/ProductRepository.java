@@ -25,7 +25,29 @@ public class ProductRepository {
             e.printStackTrace();
             return false;
         }finally {
-            if(session != null){
+            if(session != null && session.isOpen()){
+                session.close();
+            }
+        }
+
+    }
+
+    public static boolean saveOrUpdateProduct(Product product){
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            session.getTransaction().begin();
+            session.saveOrUpdate(product);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(session != null && session.isOpen() && session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            return false;
+        }finally {
+            if(session != null && session.isOpen()){
                 session.close();
             }
         }
@@ -92,6 +114,27 @@ public class ProductRepository {
                 session.close();
             }
         }
-        
+
+    }
+
+    public static Long countAll(){
+        Session session = null;
+
+        try {
+            session = HibernateUtil.openSession();
+            String hql = "SELECT COUNT(p) FROM Product p ";
+            Query query = session.createQuery(hql);
+            Long singleResult = (Long) query.getSingleResult();
+            return singleResult;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0L;
+        } finally {
+            if(session != null && session.isOpen()){
+                session.close();
+            }
+        }
+
     }
 }
