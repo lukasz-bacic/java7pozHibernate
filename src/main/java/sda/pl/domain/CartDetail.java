@@ -12,20 +12,20 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class OrderDetail implements Serializable {
-
+@NoArgsConstructor
+@Builder
+public class CartDetail implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @ManyToOne
     @JoinColumn
     Product product;
+    Long amount;
+    @Embedded
+    Price price;
     @ManyToOne
     @JoinColumn
-    Order order;
-    Long amount;
-    Price price;
+    Cart cart;
 }

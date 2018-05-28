@@ -1,10 +1,7 @@
 package sda.pl.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,12 +12,14 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = {"productRatingSet", "cartSet", "orderSet"})
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String firstName;
     String lastName;
+    @Column(unique = true)
     String email;
     String zipCode;
     String cityName;
@@ -28,5 +27,9 @@ public class User implements Serializable {
     String password;
     @OneToMany(mappedBy = "user")
     Set<Order> orderSet;
+    @OneToMany(mappedBy = "user")
+    Set<Cart> cartSet;
+    @OneToMany(mappedBy = "user")
+    Set<ProductRating> productRatingSet;
 
 }
