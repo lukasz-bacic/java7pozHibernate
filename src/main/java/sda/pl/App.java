@@ -51,7 +51,7 @@ public class App {
 
             Order kowalskiOrder = Order.builder()
                     .date(LocalDateTime.now())
-                    .email("kowalski@gmail.com")
+//                    .email("kowalski@gmail.com")
                     .RODO(true)
                     .cityName("Poznan")
                     .totalPrice(new Price())

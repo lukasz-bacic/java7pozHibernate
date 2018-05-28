@@ -2,6 +2,7 @@ package sda.pl;
 
 import lombok.*;
 import sda.pl.domain.OrderDetail;
+import sda.pl.domain.ProductImage;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,6 +25,9 @@ public class Product implements Serializable {
     Price price;
     @Enumerated(EnumType.STRING)
     Color color;
+
+    @OneToOne(mappedBy = "product")
+    ProductImage productImage;
 
     @OneToMany(mappedBy = "product")
     Set<OrderDetail> orderDetailSet;
