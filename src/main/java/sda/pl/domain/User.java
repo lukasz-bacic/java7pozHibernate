@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -31,5 +32,14 @@ public class User implements Serializable {
     Set<Cart> cartSet;
     @OneToMany(mappedBy = "user")
     Set<ProductRating> productRatingSet;
+
+    @Transient
+    BigDecimal totalOrderPrice;
+
+   public User(Long id, String email, BigDecimal totalOrderPrice){
+        this.id = id;
+        this.email = email;
+        this.totalOrderPrice = totalOrderPrice;
+    }
 
 }
