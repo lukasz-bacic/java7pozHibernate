@@ -1,14 +1,13 @@
 package sda.pl;
 
 import lombok.*;
-import sda.pl.domain.CartDetail;
-import sda.pl.domain.OrderDetail;
-import sda.pl.domain.ProductImage;
-import sda.pl.domain.ProductRating;
+import sda.pl.domain.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -17,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"orderDetailSet", "cartDetailSet",
-        "productImage", "productRatingSet"})
+        "productImage", "productRatingSet", "stockSet"})
 public class Product implements Serializable {
 
     @Id
@@ -41,4 +40,24 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "product")
     Set<ProductRating> productRatingSet;
 
+    @OneToMany(mappedBy = "product")
+    Set<Stock> stockSet;
+
+    public void addStock(WarehouseName name, BigDecimal amount) {
+        Stock stock = new Stock();
+        stock.setProduct(this);
+        stock.setWarehouseName(name);
+        stock.setAmount(amount);
+        if (stockSet == null) {
+            stockSet = new HashSet<>();
+            stockSet.add(stock);
+        }else{
+            Optional<Stock> stockExist = stockSet.stream().filter(s -> s.getWarehouseName().equals(name)).findFirst();
+            stockExist.ifPresent(s -> {
+                s.setAmount(s.getAmount().add(amount));
+            });
+
+        }
+
+    }
 }
