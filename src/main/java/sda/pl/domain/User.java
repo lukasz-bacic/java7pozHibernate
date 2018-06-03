@@ -2,6 +2,7 @@ package sda.pl.domain;
 
 
 import lombok.*;
+import sda.pl.repository.CartRepository;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"productRatingSet", "cartSet", "orderSet"})
+@EqualsAndHashCode(exclude = {"productRatingSet", "cart", "orderSet"})
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +29,8 @@ public class User implements Serializable {
     String password;
     @OneToMany(mappedBy = "user")
     Set<Order> orderSet;
-    @OneToMany(mappedBy = "user")
-    Set<Cart> cartSet;
+    @OneToOne(mappedBy = "user")
+    Cart cart;
     @OneToMany(mappedBy = "user")
     Set<ProductRating> productRatingSet;
 
@@ -40,6 +41,23 @@ public class User implements Serializable {
         this.id = id;
         this.email = email;
         this.totalOrderPrice = totalOrderPrice;
+    }
+
+
+    public Cart createCart(){
+        Cart cart = new Cart();
+        cart.setUser(this);
+        return cart;
+    }
+
+    public ProductRating rateProduct(int rate, String description, Product product){
+       ProductRating productRating = new ProductRating();
+       productRating.setActive(false);
+       productRating.setRate(rate);
+       productRating.setDescription(description);
+       productRating.setProduct(product);
+       productRating.setUser(this);
+       return productRating;
     }
 
 }

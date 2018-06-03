@@ -1,8 +1,9 @@
 package sda.pl;
 
-import org.hibernate.Session;
 import sda.pl.domain.Order;
+import sda.pl.domain.OrderComplaint;
 import sda.pl.domain.OrderDetail;
+import sda.pl.domain.Product;
 import sda.pl.repository.OrderRepository;
 import sda.pl.repository.ProductRepository;
 import sda.pl.repository.UserRepository;
@@ -17,8 +18,8 @@ public class App {
 
         Product maslo = Product.builder()
                 .name("Maslo")
-                .color(Color.WHITE)
-                .price(Price.builder().
+                .color(OrderComplaint.Color.WHITE)
+                .price(Order.Price.builder().
                         priceGross(new BigDecimal("6.50"))
                         .priceNet(new BigDecimal("4.25"))
                         .priceSymbol("PLN").build()).build();
@@ -43,7 +44,7 @@ public class App {
         if (product1.isPresent()) {
             Product product10 = product1.get();
             product10.setName("Kefir");
-            product10.setPrice(Price.builder()
+            product10.setPrice(Order.Price.builder()
                     .priceNet(new BigDecimal("3"))
                     .priceGross(new BigDecimal("3.5"))
                     .priceSymbol("PLN").build());
@@ -55,7 +56,7 @@ public class App {
 //                    .email("kowalski@gmail.com")
                     .RODO(true)
                     .cityName("Poznan")
-                    .totalPrice(new Price())
+                    .totalPrice(new Order.Price())
                     .build();
 
             OrderDetail detail1 = OrderDetail.builder()
