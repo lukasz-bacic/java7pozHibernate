@@ -1,6 +1,7 @@
 package sda.pl.domain;
 
 import lombok.*;
+import sda.pl.Price;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,7 +24,7 @@ public class Product implements Serializable {
     private Long id;
     String name;
     @Embedded
-    Order.Price price;
+    Price price;
     @Enumerated(EnumType.STRING)
     OrderComplaint.Color color;
 
@@ -75,5 +76,78 @@ public class Product implements Serializable {
         }
         productRating.setProduct(this);
         productRatingSet.add(productRating);
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public void setPrice(Price price) {
+        this.price = price;
+    }
+
+    public OrderComplaint.Color getColor() {
+        return color;
+    }
+
+    public void setColor(OrderComplaint.Color color) {
+        this.color = color;
+    }
+
+    public ProductImage getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(ProductImage productImage) {
+        this.productImage = productImage;
+    }
+
+    public Set<OrderDetail> getOrderDetailSet() {
+        return orderDetailSet;
+    }
+
+    public void setOrderDetailSet(Set<OrderDetail> orderDetailSet) {
+        this.orderDetailSet = orderDetailSet;
+    }
+
+    public Set<CartDetail> getCartDetailSet() {
+        return cartDetailSet;
+    }
+
+    public void setCartDetailSet(Set<CartDetail> cartDetailSet) {
+        this.cartDetailSet = cartDetailSet;
+    }
+
+    public Set<ProductRating> getProductRatingSet() {
+        return productRatingSet;
+    }
+
+    public void setProductRatingSet(Set<ProductRating> productRatingSet) {
+        this.productRatingSet = productRatingSet;
+    }
+
+    public Set<Stock> getStockSet() {
+        return stockSet;
+    }
+
+    public void setStockSet(Set<Stock> stockSet) {
+        this.stockSet = stockSet;
     }
 }

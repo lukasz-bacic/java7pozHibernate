@@ -18,6 +18,7 @@ public class ProductRating implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     int rate;
     String description;
     @ManyToOne

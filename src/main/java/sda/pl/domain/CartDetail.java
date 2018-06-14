@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sda.pl.Price;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,7 +23,7 @@ public class CartDetail implements Serializable{
     Product product;
     Long amount;
     @Embedded
-    Order.Price price;
+    Price price;
     @ManyToOne
     @JoinColumn
     Cart cart;

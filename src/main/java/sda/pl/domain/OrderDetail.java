@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sda.pl.Price;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -25,10 +26,10 @@ public class OrderDetail implements Serializable {
     @JoinColumn
     Order order;
     Long amount;
-    Order.Price price;
+    Price price;
 
     public OrderDetail(CartDetail cartDetail){
-        this.price = cartDetail.getPrice();
+       // this.price = cartDetail.getPrice();
         this.amount = cartDetail.getAmount();
         this.product = cartDetail.getProduct();
     }
