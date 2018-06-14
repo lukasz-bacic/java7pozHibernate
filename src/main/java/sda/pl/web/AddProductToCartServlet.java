@@ -24,15 +24,7 @@ public class AddProductToCartServlet extends HttpServlet {
         long productAmount = Long.parseLong(request.getParameter("productAmount"));
         long productId = Long.parseLong(request.getParameter("productId"));
 
-
         Cart cart = new Cart();
-//        Product product = new Product();
-//        Price price = new Price();
-//        price.setPriceGross(BigDecimal.ONE);
-//        price.setPriceNet(BigDecimal.ONE);
-//        product.setPrice(price);
-//
-//        product.setStockSet(new HashSet<>());
         Optional<Product> product = ProductRepository.findProduct(productId);
         if(product.isPresent()) {
             cart.addProductToCart(product.get(), productAmount);

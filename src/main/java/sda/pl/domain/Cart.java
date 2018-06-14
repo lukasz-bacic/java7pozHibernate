@@ -23,7 +23,7 @@ public class Cart implements Serializable {
     @OneToOne
     @JoinColumn
     User user;
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     Set<CartDetail> cartDetailSet;
     @Transient
     private boolean valid;
