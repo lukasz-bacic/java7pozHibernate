@@ -1,4 +1,4 @@
-<%--
+<%@ page import="sda.pl.domain.ProductType" %><%--
   Created by IntelliJ IDEA.
   User: lbacic_adm
   Date: 14.06.2018
@@ -6,9 +6,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    ProductType[] values = ProductType.values();
+    pageContext.setAttribute("categories", values);
+%>
 <h1 class="my-4">Shop Name</h1>
 <div class="list-group">
-    <a href="#" class="list-group-item">Category 1</a>
-    <a href="#" class="list-group-item">Category 2</a>
-    <a href="#" class="list-group-item">Category 3</a>
+
+    <c:forEach var="category" items="${categories}" >
+     <a href="productByCategory.jsp?category=${category}" class="list-group-item">${category}</a>
+    </c:forEach>
+
 </div>

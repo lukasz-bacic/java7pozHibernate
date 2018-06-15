@@ -29,7 +29,7 @@ public class OrderDetail implements Serializable {
     Price price;
 
     public OrderDetail(CartDetail cartDetail){
-       // this.price = cartDetail.getPrice();
+        this.price = cartDetail.getPrice();
         this.amount = cartDetail.getAmount();
         this.product = cartDetail.getProduct();
     }

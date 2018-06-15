@@ -23,6 +23,10 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     String name;
+
+    @Enumerated
+    ProductType productType;
+
     @Embedded
     Price price;
     @Enumerated(EnumType.STRING)

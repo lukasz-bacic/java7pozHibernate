@@ -1,6 +1,7 @@
 package sda.pl.repository;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import sda.pl.HibernateUtil;
 import sda.pl.domain.Cart;
 
@@ -55,6 +56,55 @@ public class CartRepository {
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
+    }
+
+    public static Optional<Cart> findCartByUserId(Long userId) {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            String hql = "SELECT c FROM Cart c JOIN FETCH c.cartDetailSet WHERE c.user.id = :userId";
+            Query query = session.createQuery(hql);
+            query.setParameter("userId", userId);
+            return Optional.ofNullable((Cart) query.getSingleResult());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        }
+
+    public static void deleteCart(Cart cartByUserId) {
+        Session session = null;
+        try {
+
+            session = HibernateUtil.openSession();
+            session.getTransaction().begin();
+            String removeCartDetail = "DELETE FROM CartDetail cd WHERE cd.cart.id = :cartId";
+            String removeCart = "DELETE FROM Cart c WHERE c.id = :cartId";
+
+            Query query = session.createQuery(removeCartDetail);
+            query.setParameter("cartId", cartByUserId.getId());
+            query.executeUpdate();
+
+            Query removeCartQuery = session.createQuery(removeCart);
+            removeCartQuery.setParameter("cartId", cartByUserId.getId());
+            removeCartQuery.executeUpdate();
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            if(session != null && session.isOpen() && session.getTransaction().isActive()){
+                session.getTransaction().rollback();
+            }
+            e.printStackTrace();
         } finally {
             if (session != null) {
                 session.close();

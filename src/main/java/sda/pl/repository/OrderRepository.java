@@ -64,4 +64,21 @@ public class OrderRepository {
     }
 
 
+    public static List<Order> findAllByUserId(Long userId) {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            String hql = "SELECT o FROM Order o JOIN FETCH o.orderDetailSet WHERE o.user.id = :userId";
+            Query query = session.createQuery(hql);
+            query.setParameter("userId", userId);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }finally {
+            if(session != null && session.isOpen()){
+                session.close();
+            }
+        }
+    }
 }

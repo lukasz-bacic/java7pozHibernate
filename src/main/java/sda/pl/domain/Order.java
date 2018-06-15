@@ -67,17 +67,17 @@ public class Order implements Serializable {
         totalPrice.setPriceSymbol("PLN");
 
         getOrderDetailSet().forEach(
-                cd ->
+                od ->
                 {
                     getTotalPrice().setPriceGross(getTotalPrice().getPriceGross()
                             .add(
-                                    cd.getPrice().getPriceGross().multiply(new BigDecimal(cd.getAmount()))
+                                    od.getPrice().getPriceGross().multiply(new BigDecimal(od.getAmount()))
                             )
                     );
 
                     getTotalPrice().setPriceNet(getTotalPrice().getPriceNet()
                             .add(
-                                    cd.getPrice().getPriceNet().multiply(new BigDecimal(cd.getAmount()))
+                                    od.getPrice().getPriceNet().multiply(new BigDecimal(od.getAmount()))
                             )
                     );
                 }

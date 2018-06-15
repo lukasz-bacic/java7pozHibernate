@@ -5,6 +5,7 @@ import org.hibernate.query.Query;
 import sda.pl.HibernateUtil;
 import sda.pl.domain.OrderComplaint;
 import sda.pl.domain.Product;
+import sda.pl.domain.ProductType;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -196,6 +197,28 @@ public class ProductRepository {
             }
         }
 
+
+    }
+
+    public static List<Product> findAllByCategory(ProductType category) {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            String hql = "SELECT p FROM Product p WHERE p.productType = :category";
+            Query query = session.createQuery(hql);
+            query.setParameter("category", category);
+            List resultList = query.getResultList();
+
+            return resultList;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
 
     }
 }
