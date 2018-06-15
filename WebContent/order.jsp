@@ -68,38 +68,29 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Nazwa produktu</th>
-                            <th scope="col">Ilość</th>
-                            <th scope="col">Cena netto</th>
-                            <th scope="col">Cena brutto</th>
-                            <th scope="col">Usuń</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Adres wysyłki</th>
+                            <th scope="col">Kwota netto</th>
+                            <th scope="col">Kwota brutto</th>
+                            <th scope="col">Pozycje zamówienia</th>
 
 
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${cart.cartDetailSet}" var="cd" varStatus="i">
+                        <c:forEach items="${userOrders}" var="o" varStatus="i">
                         <tr>
                             <th scope="row">${i.index+1}</th>
-                            <td><a href="product.jsp?productId=${cd.product.id}" >${cd.product.name}</a></td>
-                            <td>${cd.amount}</td>
-                            <td>${cd.price.priceNet}</td>
-                            <td>${cd.price.priceGross}</td>
-                            <td><a href="#" >Usuń</a></td>
+                            <td>${o.date}</td>
+                            <td>${o.cityName}</td>
+                            <td>${o.totalPrice.priceNet}</td>
+                            <td>${o.totalPrice.priceGross}</td>
+                            <td><a href="#" >Pozycje zamówienia</a></td>
                         </tr>
                         </c:forEach>
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td>100 zl</td>
-                            <td>120 zl</td>
-                        </tr>
-                        </tfoot>
                     </table>
 
-
-                    <a href="/createOrder" class="btn-success btn">Kup i zapłać</a>
                 </div>
 
 

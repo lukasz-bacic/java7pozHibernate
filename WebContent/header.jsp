@@ -24,7 +24,7 @@
                     <a class="nav-link" href="cart.jsp">Koszyk</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
+                    <a class="nav-link" href="order.jsp">Zamówienia</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
