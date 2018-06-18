@@ -154,9 +154,9 @@ public class ProductRepository {
             Root<Product> from = query.from(Product.class);
             query.select(from);
             Predicate whereNameLike = cb.like(from.get("name"), "%" + name + "%");
-            Predicate whiteProduct = cb.equal(from.get("color"), OrderComplaint.Color.WHITE);
+            //Predicate whiteProduct = cb.equal(from.get("color"), OrderComplaint.Color.WHITE);
 
-            Predicate whereNameLikeAndCOlorWhite = cb.and(whereNameLike, whiteProduct);
+            Predicate whereNameLikeAndCOlorWhite = cb.and(whereNameLike);
 
             query.where(whereNameLikeAndCOlorWhite);
 
