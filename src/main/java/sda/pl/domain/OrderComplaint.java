@@ -28,7 +28,4 @@ public class OrderComplaint implements Serializable {
     Set<Order> orderSet;
 
 
-    public static enum Color {
-        WHITE, BLACK, RED
-    }
 }

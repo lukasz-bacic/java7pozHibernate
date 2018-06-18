@@ -7,11 +7,13 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    Long userId = 1L;
     String phrase = request.getParameter("phrase");
     if(phrase== null){
         phrase="";
     }
     pageContext.setAttribute("phrase", phrase);
+    pageContext.setAttribute("userId", userId);
 %>
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -40,9 +42,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="order.jsp">Zamówienia</a>
                 </li>
+                <c:if test="${userId eq 1}">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a class="nav-link" href="productAdminPage.jsp">Panel admina</a>
                 </li>
+                </c:if>
             </ul>
         </div>
     </div>
