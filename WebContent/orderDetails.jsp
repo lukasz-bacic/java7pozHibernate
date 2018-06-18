@@ -1,31 +1,31 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="sda.pl.repository.ProductRepository" %>
 <%@ page import="java.util.List" %>
-<%@ page import="sda.pl.domain.Product" %>
+<%@ page import="sda.pl.repository.ProductRepository" %>
 <%@ page import="java.util.Optional" %>
 <%@ page import="sda.pl.repository.CartRepository" %>
-<%@ page import="sda.pl.domain.Cart" %>
-<%--
+<%@ page import="sda.pl.repository.OrderRepository" %>
+<%@ page import="sda.pl.domain.*" %>
+<%@ page import="java.util.Set" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%--
   Created by IntelliJ IDEA.
-  User: lbacic_adm
-  Date: 14.06.2018
-  Time: 20:12
+  User: PC
+  Date: 17.06.2018
+  Time: 13:42
   To change this template use File | Settings | File Templates.
 --%>
 <%
-    // TODO dodac user z sesji albo ciastka
-    Long USER_ID = 1L;
+    Long orderId = Long.valueOf(request.getParameter("orderId"));
+    Optional<Order> orderByOrderId = OrderRepository.findOrderById(orderId);
 
-    Optional<Cart> cartByUserId = CartRepository.findCartByUserId(USER_ID);
-
-    if(cartByUserId.isPresent()) {
-        pageContext.setAttribute("cart", cartByUserId.get());
-    }else{
-        //TODO dodac przekierowanie
+    if (orderByOrderId.isPresent()) {
+        pageContext.setAttribute("order", orderByOrderId.get());
+    } else {
+        //TODO dodac przekierowanie, error 404
     }
 
 %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,9 +47,7 @@
 </head>
 
 <body>
-
-<%@include file="header.jsp"%>
-
+<%@ include file="header.jsp" %>
 <!-- Page Content -->
 <div class="container">
 
@@ -57,7 +55,7 @@
 
         <div class="col-lg-3">
 
-           <%@include file="leftMenu.jsp"%>
+            <%@include file="leftMenu.jsp" %>
 
         </div>
         <!-- /.col-lg-3 -->
@@ -72,49 +70,46 @@
                             <th scope="col">#</th>
                             <th scope="col">Nazwa produktu</th>
                             <th scope="col">Ilość</th>
+                            <th scope="col">Cena netto (1szt.)</th>
                             <th scope="col">Cena netto</th>
+                            <th scope="col">Cena brutto (1szt.)</th>
                             <th scope="col">Cena brutto</th>
-                            <th scope="col">Usuń</th>
-
-
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${cart.cartDetailSet}" var="cd" varStatus="i">
-                        <tr>
-                            <th scope="row">${i.index+1}</th>
-                            <td><a href="product.jsp?productId=${cd.product.id}" >${cd.product.name}</a></td>
-                            <td>${cd.amount}</td>
-                            <td>${cd.price.priceNet}</td>
-                            <td>${cd.price.priceGross}</td>
-                            <td><a href="/removeProductFromCart?productId=${cd.product.id}">Usuń</a></td>                        </tr>
+                        <c:forEach items="${order.orderDetailSet}" var="od" varStatus="i">
+                            <tr>
+                                <th scope="row">${i.index+1}</th>
+                                <td><a href="product.jsp?productId=${od.product.id}">${od.product.name}</a></td>
+                                <td>${od.amount}</td>
+                                <td>${od.price.priceNet}</td>
+                                <td>${od.price.priceNet*od.amount}</td>
+                                <td>${od.price.priceGross}</td>
+                                <td>${od.price.priceGross*od.amount}</td>
+                            </tr>
                         </c:forEach>
                         </tbody>
                         <tfoot>
                         <tr>
                             <td colspan="4"></td>
                             <td><c:set var="total" value="${0}"/>
-                                <c:forEach var="article" items="${cart.cartDetailSet}">
-                                    <c:set var="total" value="${total + (article.product.price.priceNet*article.amount)}" />
+                                <c:forEach var="article" items="${order.orderDetailSet}">
+                                    <c:set var="total" value="${total + (article.price.priceNet*article.amount)}" />
                                 </c:forEach>
                                 ${total}zł
                             </td>
                             <td colspan="1"></td>
                             <td><c:set var="total" value="${0}"/>
-                                <c:forEach var="article" items="${cart.cartDetailSet}">
-                                    <c:set var="total" value="${total + (article.product.price.priceGross*article.amount)}" />
+                                <c:forEach var="article" items="${order.orderDetailSet}">
+                                    <c:set var="total" value="${total + (article.price.priceGross*article.amount)}" />
                                 </c:forEach>
                                 ${total}zł
                             </td>
                         </tr>
                         </tfoot>
                     </table>
-
-
-                    <a href="/createOrder" class="btn-success btn">Kup i zapłać</a>
+                    <a href="order.jsp">Powrót</a>
                 </div>
-
-
 
             </div>
             <!-- /.row -->
@@ -122,14 +117,13 @@
         </div>
         <!-- /.col-lg-9 -->
 
+
     </div>
     <!-- /.row -->
 
 </div>
 <!-- /.container -->
-
-<%@include file="footer.jsp"%>
-
+<%@include file="footer.jsp" %>
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

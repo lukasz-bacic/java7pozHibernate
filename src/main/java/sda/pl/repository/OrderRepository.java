@@ -7,6 +7,7 @@ import sda.pl.domain.Order;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class OrderRepository {
 
@@ -77,6 +78,21 @@ public class OrderRepository {
             return Collections.emptyList();
         }finally {
             if(session != null && session.isOpen()){
+                session.close();
+            }
+        }
+    }
+
+    public static Optional<Order> findOrderById (Long id) {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            return Optional.ofNullable(session.find(Order.class, id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        } finally {
+            if (session != null && session.isOpen()) {
                 session.close();
             }
         }

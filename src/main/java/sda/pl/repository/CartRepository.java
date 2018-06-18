@@ -112,4 +112,29 @@ public class CartRepository {
         }
 
     }
+
+    public static boolean deleteProductFromCart(Cart cart, Long productId) {
+        Session session = null;
+        try {
+            session = HibernateUtil.openSession();
+            session.getTransaction().begin();
+
+            String hql = "delete from CartDetail cd where cd.product.id = :productId";
+            Query query = session.createQuery(hql);
+            query.setParameter("productId", productId);
+            query.executeUpdate();
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (session != null && session.isOpen() && session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            return false;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
 }

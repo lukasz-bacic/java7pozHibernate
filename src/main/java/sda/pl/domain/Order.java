@@ -32,7 +32,7 @@ public class Order implements Serializable {
     String cityName;
     boolean RODO;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     Set<OrderDetail> orderDetailSet;
 
 

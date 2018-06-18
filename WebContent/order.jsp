@@ -85,7 +85,7 @@
                             <td>${o.cityName}</td>
                             <td>${o.totalPrice.priceNet}</td>
                             <td>${o.totalPrice.priceGross}</td>
-                            <td><a href="#" >Pozycje zamówienia</a></td>
+                            <td><a href="orderDetails.jsp?orderId=${o.id}" >Pozycje zamówienia</a></td>
                         </tr>
                         </c:forEach>
                         </tbody>
