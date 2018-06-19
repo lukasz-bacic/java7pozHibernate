@@ -1,4 +1,7 @@
 <%@ page import="sda.pl.Color" %>
+<%@ page import="sda.pl.domain.Product" %>
+<%@ page import="sda.pl.repository.ProductRepository" %>
+<%@ page import="java.util.Optional" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -40,6 +43,17 @@
     Color[] colors = Color.values();
     pageContext.setAttribute("colors", colors);
 
+    String productId = request.getParameter("productId");
+    Product product = new Product();
+    if (productId != null && productId.trim().length() > 0) {
+        Optional<Product> productOptional = ProductRepository.findProduct(Long.valueOf(productId));
+        if (productOptional.isPresent()) {
+            product = productOptional.get();
+        }
+    }
+
+    pageContext.setAttribute("product", product);
+
 %>
 <%@include file="header.jsp" %>
 
@@ -62,23 +76,31 @@
                 <form action="/productAdmin" method="post">
 
                     <div class="form-group">
+                        <input type="hidden" value="${product.id}" name="productId">
                         <label for="name">Nazwa produktu</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Nazwa produktu">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Nazwa produktu"
+                               value="${product.name}">
                     </div>
                     <div class="form-group">
                         <label for="netPrice">Cena netto</label>
-                        <input type="text" class="form-control" id="netPrice" name="netPrice" placeholder="Cena netto">
+                        <input type="text" class="form-control" id="netPrice" name="netPrice" placeholder="Cena netto"
+                               value="${product.price.priceNet}">
                     </div>
                     <div class="form-group">
                         <label for="grossPrice">Cena brutto</label>
                         <input type="text" class="form-control" id="grossPrice" name="grossPrice"
-                               placeholder="Cena brutto">
+                               placeholder="Cena brutto" value="${product.price.priceGross}">
                     </div>
                     <div class="form-group">
                         <label for="color">Kolor</label>
                         <select name="color" id="color" class="form-control">
                             <c:forEach var="color" items="${colors}">
-                                <option>${color}</option>
+                                <c:if test="${product.color.equals(color)}">
+                                    <option selected="selected">${color}</option>
+                                </c:if>
+                                <c:if test="${! product.color.equals(color)}">
+                                    <option>${color}</option>
+                                </c:if>
                             </c:forEach>
                         </select>
                     </div>
@@ -86,7 +108,12 @@
                         <label for="productType">Typ</label>
                         <select name="productType" id="productType" class="form-control">
                             <c:forEach var="category" items="${categories}">
-                                <option>${category}</option>
+                                <c:if test="${product.productType.equals(category)}">
+                                    <option selected="selected">${category}</option>
+                                </c:if>
+                                <c:if test="${! product.productType.equals(category)}">
+                                    <option>${category}</option>
+                                </c:if>
                             </c:forEach>
                         </select>
                     </div>
