@@ -73,7 +73,7 @@
 
             <div class="row">
 
-                <form action="/productAdmin" method="post">
+                <form action="/productAdmin" method="post" enctype="multipart/form-data">
 
                     <div class="form-group">
                         <input type="hidden" value="${product.id}" name="productId">

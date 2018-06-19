@@ -4,18 +4,26 @@ import sda.pl.Color;
 import sda.pl.Price;
 import sda.pl.ProjectHelper;
 import sda.pl.domain.Product;
+import sda.pl.domain.ProductImage;
 import sda.pl.domain.ProductType;
 import sda.pl.repository.ProductRepository;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 
 @WebServlet(name = "ProductAdminServlet", urlPatterns = "/productAdmin")
+@MultipartConfig(fileSizeThreshold=1024*1024*10, 	// 10 MB
+        maxFileSize=1024*1024*50,      	// 50 MB
+        maxRequestSize=1024*1024*100)   	// 100 MB
 public class ProductAdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Long id = ProjectHelper.convertStringToLong(request.getParameter("productId"));
@@ -37,7 +45,12 @@ public class ProductAdminServlet extends HttpServlet {
                 .id(productFromDB != null ? productFromDB.getId() : null)
                 .build();
 
-
+        Part photo = request.getPart("photo");
+        if(photo!= null) {
+            product.addProductImage(photo);
+        }else{
+            product.setProductImage(productFromDB.getProductImage());
+        }
 
         ProductRepository.saveOrUpdateProduct(product);
 
